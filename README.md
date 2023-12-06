@@ -110,5 +110,5 @@ Under logistic growth, at t=4980 min, the population size has already reached ca
 # Question 3: Comparing exponential and logistic growth curves
 *(20 points) Add an R script to your repository that makes a graph comparing the exponential and logistic growth curves (using the same parameter estimates you found). Upload this graph to your repo and include it in the README.md file so it can be viewed in the repo homepage.*
 
-![Graph to show comparison of exponential and logistical growth curves]
+![Graph to show comparison of exponential and logistical growth curves](https://github.com/anon4395/logistic_growth/blob/main/exp_log_comparison_graph.png)
 
