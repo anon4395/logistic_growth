@@ -1,7 +1,7 @@
 # logistic_growth
-# Question 1: Analysis
+## Question 1: Analysis
 *(10 points) Annotate the README.md file in your logistic growth repo with more detailed information about the analysis. Add a section on the results and include the estimates for N0, r and K (mention which .csv file you used).*
-## Step 1: Plotting the Data
+### Step 1: Plotting the Data
 First, the data must be obtained, from the experiment1 csv file:
 ```
 growth_data <- read.csv("/cloud/project/experiment1.csv")
@@ -24,9 +24,9 @@ ggplot(aes(t,N), data = growth_data) +
   scale_y_continuous(trans='log10')
 ```
 
-## Step 2: Estimate model parameters using linear approximation
+### Step 2: Estimate model parameters using linear approximation
 In order to estimate initial popultion size (*N0*), carrying capacity(*K*) and growth rate (*r*), linear models can be described and used. 
-### Case 1. K >> N0, t is small
+#### Case 1. K >> N0, t is small
 When inital population size (*N0*) is much smaller than the carrying capacity (*K*), population growth will be exponential. This occurs when t is small (in this model, we have used the range *t<1250* as on the logistic growth graph above, this appears to be the point as which the population size starts to increase dramatically).
 
 Taking the logistic growth equation, solved for *N(t)*:
@@ -57,7 +57,7 @@ From this, we get that:
 $$\ ln(N_0) = 6.888 \$$
 
 $$\ r = 0.01002 \$$
-### Case 2. N(t) = K
+#### Case 2. N(t) = K
 As t tends to infinity, the population size can be assumed to be equal to the carrying capacity. In this model we have used *t>2500*, as on the logistic growth graph, this appears to be the point as which the population size starts to plateau. 
 
 To use a linear approximation, we can then write this again in the form y = c + mx as:
@@ -73,7 +73,7 @@ summary(model2)
 From this, we get that:
 
 $$\ K = 6.00 \times 10^{10} \$$
-## Step 3: Plotting the data against the model
+### Step 3: Plotting the data against the model
 The estimates obtained from the linear approximations can then be used to define a model logistic growth curve, which can then be compared to the acutal logistic growth curve produced from our data in step 1. We can plot the log transformed curves to enable better comparison.
 ```
 logistic_fun <- function(t) {
@@ -90,7 +90,14 @@ ggplot(aes(t,N), data = growth_data) +
   geom_point()+
   scale_y_continuous(trans='log10')
 ```
-# Question 2: Calculating predicted population sizes according to exponential growth
+### Results
+The estimates we obtained from the linear approximation are:
+$$\ N_0 = 980.4 \$$
+$$\ r = 0.01002 \$$
+$$\ K = 6.00 \times 10^{10} \$$
+
+The intial starting population of bacteria in the medium was 980, which had an intrinsic growth rate of 0.01, and reached carrying capacity at a population size of 6x10^10. 
+## Question 2: Calculating predicted population sizes according to exponential growth
 *(10 points) Use your estimates of N0 and r to calculate the population size at t = 4980 min, assuming that the population grows exponentially. How does it compare to the population size predicted under logistic growth?*
 
 An exponential growth model can be defined using the formula:
@@ -109,7 +116,7 @@ $$\ N(t) = 6 \times 10^{10} \$$
 
 Under logistic growth, at t=4980 min, the population size has already reached carrying capacity (6 x10^10), hence this is the value for population size. However under exponential growth, per capita growth rate remains the same even as population size increases, and there is no carrying capacity limit. Hence, the population size predicted by the exponential model is signficantly larger (4.6 x 10^24). 
 
-# Question 3: Comparing exponential and logistic growth curves
+## Question 3: Comparing exponential and logistic growth curves
 *(20 points) Add an R script to your repository that makes a graph comparing the exponential and logistic growth curves (using the same parameter estimates you found). Upload this graph to your repo and include it in the README.md file so it can be viewed in the repo homepage.*
 
 ![Graph to show comparison of exponential and logistical growth curves](https://github.com/anon4395/logistic_growth/blob/main/exp_log_comparison_graph.png)
