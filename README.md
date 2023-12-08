@@ -25,15 +25,19 @@ ggplot(aes(t,N), data = growth_data) +
 ```
 
 ### Step 2: Estimate model parameters using linear approximation
-In order to estimate initial popultion size (*N0*), carrying capacity(*K*) and growth rate (*r*), linear models can be described and used. 
+In order to estimate initial popultion size (*N0*), carrying capacity(*K*) and growth rate (*r*), we can use the following assumptions to define linear models: 
 #### Case 1. K >> N0, t is small
-When inital population size (*N0*) is much smaller than the carrying capacity (*K*), population growth will be exponential. This occurs when t is small (in this model, we have used the range *t<1250* as on the logistic growth graph above, this appears to be the point as which the population size starts to increase dramatically).
+When inital population size (*N0*) is much smaller than the carrying capacity (*K*), population growth will be exponential. This occurs when t is small (in this model, we have used the range *t<1250* as on the logistic growth graph above, this appears to be the point at which the population size starts to increase dramatically).
 
 Taking the logistic growth equation, solved for *N(t)*:
 
 $$\ N(t) = \frac{KN_0e^{rt}}{K - N_0 + N_0e^{rt}} \$$
 
-in this case, we can then approximate *K - N0 + N0e^rt ~ K*, hence the denominator of the expression becomes K. The Ks in the numerator and denominator then cancel out, giving the expression:
+in this case, we can then approximate: 
+
+$$\ K - N_0 + N_0 e^{rt} = K \$$
+
+hence the denominator of the expression becomes K. The Ks in the numerator and denominator then cancel out, giving the expression:
 
 $$\ N(t) = N_0 e^{rt} \$$
 
@@ -45,10 +49,12 @@ This is in the same form as the equation of a line:
 
 $$\ y = c + mx \$$
 
-So we can specifiy this linear approximation where *y* is *ln(N)* (here, a mutated variable called *N_log*), and *x is t*. The *summary()* function will then give as an estimate for the intercept, in this case the log of the initial population size (*ln(N0)*), and the gradient, in this case the growth rate (*r*).
+So we can specifiy this linear approximation where *y* is *ln(N)* (here, a mutated variable called *N_log*), and *x is t*. The *summary()* function will then give as an estimate for the intercept, which is log of the initial population size (*ln(N0)*), and the gradient, which is the growth rate (*r*).
 
 ```
+#Create new data subset with filtered and transformed values
 data_subset1 <- growth_data %>% filter(t<1250) %>% mutate(N_log = log(N))
+#Define the linear model
 model1 <- lm(N_log ~ t, data_subset1)
 summary(model1)
 ```
@@ -58,15 +64,17 @@ $$\ ln(N_0) = 6.888 \$$
 
 $$\ r = 0.01002 \$$
 #### Case 2. N(t) = K
-As t tends to infinity, the population size can be assumed to be equal to the carrying capacity. In this model we have used *t>2500*, as on the logistic growth graph, this appears to be the point as which the population size starts to plateau. 
+As t tends to infinity, the population size can be assumed to be equal to the carrying capacity. In this model we will use *t>2500*, as on the logistic growth graph, this appears to be the point as which the population size starts to plateau. 
 
 To use a linear approximation, we can then write this again in the form y = c + mx as:
 
 $$\ N(t) = K + 0t \$$
 
-So here, *y* is *N(t)*, and doesn't vary according to any other variable, so where we would have the *x* value is instead just *1*. The *summary()* function will then give an estimate for the intercept, in this case the carrying capacity of the population, *K*.
+So here, *y* is *N(t)*, and doesn't vary according to any other variable, so when we define our linear model, where we would have the *x* value is instead just *1*. The *summary()* function will then give an estimate for the intercept, which in this case is the carrying capacity of the population, *K*.
 ```
+#Create new data subset with filtered values
 data_subset2 <- growth_data %>% filter(t>2500)
+#Define the linear model
 model2 <- lm(N ~ 1, data_subset2)
 summary(model2)
 ```
@@ -106,15 +114,17 @@ $$\ N(t) = N_0 e^{rt} \$$
 
 Substituting in the values obtained from our linear model we get that:
 
-$$\ N(t) = e^{6.888} \times e^{0.01002 \times 4980} \$$
+$$\ N(t) = 980.4 \times e^{0.01002 \times 4980} \$$
+
 $$\ N(t) = 4.598 \times 10^{24} \$$
 
 
 Compared to under logistic growth:
 $$\ N(t) = \frac{KN_0e^{rt}}{K - N_0 + N_0e^{rt}} \$$
+$$\ N(t) = \frac{{6 \times 10^{10}}980.4e^{0.01002 \times 4980}}{6 \times 10^{10} - 980.4 + 980.4e^{0.01002 \times 4980}} \$$
 $$\ N(t) = 6 \times 10^{10} \$$
 
-Under logistic growth, at t=4980 min, the population size has already reached carrying capacity (6 x10^10), hence this is the value for population size. However under exponential growth, per capita growth rate remains the same even as population size increases, and there is no carrying capacity limit. Hence, the population size predicted by the exponential model is signficantly larger (4.6 x 10^24). 
+Under logistic growth, at t=4980 min, the population size has already reached carrying capacity (6 x10^10), hence this is the value for population size. However under exponential growth, per capita growth rate remains the same even as population size increases, and there is no carrying capacity limit. Hence, the population size predicted at t=4980 by the exponential model is signficantly larger (4.6 x 10^24) than predicted by the logistic growth model (6 x10^10).
 
 ## Question 3: Comparing exponential and logistic growth curves
 *(20 points) Add an R script to your repository that makes a graph comparing the exponential and logistic growth curves (using the same parameter estimates you found). Upload this graph to your repo and include it in the README.md file so it can be viewed in the repo homepage.*
